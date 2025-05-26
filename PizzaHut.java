@@ -30,6 +30,7 @@ public class PizzaHut {
                 "Salida Cuzco",
                 "Salida Puno",
                 "Salida Arequipa",
+                "Salida Lampa"
                 "Encuentre mi ubicación"
         };
         Ubi = ubicaciones[i - 1];
@@ -37,7 +38,7 @@ public class PizzaHut {
     }
 
     public void mostrarMenu (){
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= 7; i++) {
             System.out.println(generarOpcion(generarMenu(i),i));
         }
         seleccionarMenu();
@@ -48,7 +49,7 @@ public class PizzaHut {
         int opcion;
         double cargo;
         opcion = ValidarEntradaNumerica(1,6,"Seleccione su ubicación:");
-        if (opcion >= 1 && opcion <= 5) {
+        if (opcion >= 1 && opcion <= 6) {
             Ubi = generarMenu(opcion);
             cargo= aplicarCargo(opcion);
             cargoEntrega(Ubi, cargo);
@@ -56,7 +57,7 @@ public class PizzaHut {
         }
         else {
             Random rand = new Random();
-            opcion = rand.nextInt(5);
+            opcion = rand.nextInt(6);
             Ubi = generarMenu(opcion);
             cargo = aplicarCargo(opcion);
             cargoEntrega(Ubi, cargo);
@@ -65,7 +66,7 @@ public class PizzaHut {
     }
 
     public double aplicarCargo (int cargo){
-        int km [] = {3,8,5,6,0};
+        int km [] = {3,8,5,6,0,9};
         return km[cargo]*0.3;
     }
 
