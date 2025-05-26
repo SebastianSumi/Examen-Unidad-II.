@@ -30,7 +30,7 @@ public class PizzaHut {
                 "Salida Cuzco",
                 "Salida Puno",
                 "Salida Arequipa",
-                "Salida Lampa"
+                "Salida Lampa",
                 "Encuentre mi ubicación"
         };
         Ubi = ubicaciones[i - 1];
