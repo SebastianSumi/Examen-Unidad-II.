@@ -1,0 +1,348 @@
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+public class Pizza_Hot {
+    Scanner entrada = new Scanner(System.in);
+    String emailGuardado, contraseñaGuardada;
+
+    private boolean validarCorreo(String email) {
+        String regex = "^[\\w.-]+@[\\w.-]+\\.com$";
+        return Pattern.compile(regex).matcher(email).matches();
+    }
+
+    private boolean validarPassword(String password) {
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@&%$#!?*])[A-Za-z\\d@&%$#!?*]{8,}$";
+        return Pattern.compile(regex).matcher(password).matches();
+    }
+
+    private int validarEntradaNumerica(int min, int max, String mensaje) {
+        int valor;
+        do {
+            System.out.println(mensaje);
+            while (!entrada.hasNextInt()) {
+                System.out.println("Debe ingresar un dato numérico.");
+                entrada.next();
+                System.out.println(mensaje);
+            }
+            valor = entrada.nextInt();
+            entrada.nextLine();
+        } while (valor < min || valor > max);
+        return valor;
+    }
+
+    private boolean validarTarjeta(String numero) {
+        String regex = "^[0-9]{16}$";
+        return Pattern.compile(regex).matcher(numero).matches();
+    }
+
+    private boolean validarCVV(String cvv) {
+        String regex = "^[0-9]{3}$";
+        return Pattern.compile(regex).matcher(cvv).matches();
+    }
+
+    private String obtenerMetodoPago() {
+        String metodo = "";
+        while (true) {
+            System.out.println("Ingrese el método de pago (Tarjeta o Efectivo):");
+            metodo = entrada.nextLine().trim();
+            if (metodo.equalsIgnoreCase("tarjeta") || metodo.equalsIgnoreCase("efectivo")) {
+                if (metodo.equalsIgnoreCase("tarjeta")) {
+                    System.out.println("Ingrese el número de tarjeta (16 dígitos, solo números):");
+                    String tarjeta = entrada.nextLine().trim();
+                    while (!validarTarjeta(tarjeta)) {
+                        System.out.println("Número de tarjeta inválido, debe ser de exactamente 16 dígitos. Intente nuevamente:");
+                        tarjeta = entrada.nextLine().trim();
+                    }
+                    System.out.println("Ingrese el CVV (3 dígitos, solo números):");
+                    String cvv = entrada.nextLine().trim();
+                    while (!validarCVV(cvv)) {
+                        System.out.println("CVV inválido, debe ser de exactamente 3 dígitos. Intente nuevamente:");
+                        cvv = entrada.nextLine().trim();
+                    }
+                }
+                break;
+            } else {
+                System.out.println("Método de pago no reconocido. Por favor, ingrese 'Tarjeta' o 'Efectivo'.");
+            }
+        }
+        return metodo;
+    }
+
+    private Object[] crearProducto(String nombre, int cantidad, double precio, String categoria) {
+        Object[] prod = new Object[4];
+        prod[0] = nombre;
+        prod[1] = cantidad;
+        prod[2] = precio;
+        prod[3] = categoria;
+        return prod;
+    }
+
+    private double totalProducto(Object[] prod) {
+        int cantidad = (int) prod[1];
+        double precio = (double) prod[2];
+        return cantidad * precio;
+    }
+
+    public void registrarCuenta() {
+        String email, contraseña;
+        System.out.println("BIENVENIDO A PIZZA HOT");
+        do {
+            System.out.println("Ingrese su correo electrónico:");
+            email = entrada.nextLine();
+            if (!validarCorreo(email)) {
+                System.out.println("El correo ingresado no es válido. Debe contener '@' y terminar en .com");
+            }
+        } while (!validarCorreo(email));
+        do {
+            System.out.println("Ingrese su contraseña (mínimo 8 caracteres, letras, números y caracteres especiales):");
+            contraseña = entrada.nextLine();
+            if (!validarPassword(contraseña)) {
+                System.out.println("La contraseña no cumple con los requisitos.");
+            }
+        } while (!validarPassword(contraseña));
+        System.out.println("Gracias por registrarse. Ahora puede iniciar sesión.");
+        emailGuardado = email;
+        contraseñaGuardada = contraseña;
+    }
+
+    public boolean iniciarSesion() {
+        String email, contraseña;
+        int intentos = 4;
+        while (intentos > 0) {
+            System.out.println("\n--- INICIO DE SESIÓN ---");
+            System.out.println("Ingrese su correo electrónico:");
+            email = entrada.nextLine();
+            System.out.println("Ingrese su contraseña:");
+            contraseña = entrada.nextLine();
+            if (email.equals(emailGuardado) && contraseña.equals(contraseñaGuardada)) {
+                System.out.println("Inicio de sesión correcto. ¡Bienvenido a Pizza Hot!");
+                return true;
+            } else {
+                intentos--;
+                System.out.println("Inicio de sesión fallido. Le quedan " + intentos + " intentos.");
+            }
+        }
+        System.out.println("No se pudo acceder al sistema.");
+        return false;
+    }
+
+    public void menuPrincipal() {
+        System.out.println("\n--- MENÚ DE COMPRAS ---");
+        System.out.println("Puede agregar varios productos a su carrito de compras.");
+        agregarAlCarrito();
+    }
+
+    public void agregarAlCarrito() {
+        Object[][] carrito = new Object[100][];
+        int contador = 0;
+        int opcion;
+        do {
+            System.out.println("\n--- Menú de Productos ---");
+            System.out.println("1. Agregar Pizza");
+            System.out.println("2. Agregar Complemento (Bebidas/Postres)");
+            System.out.println("3. Terminar de comprar");
+            opcion = validarEntradaNumerica(1, 3, "Ingrese una opción:");
+            switch (opcion) {
+                case 1:
+                    if (contador < carrito.length) {
+                        carrito[contador] = agregarPizza();
+                        contador++;
+                    } else {
+                        System.out.println("El carrito está lleno.");
+                    }
+                    break;
+                case 2:
+                    if (contador < carrito.length) {
+                        carrito[contador] = agregarComplemento();
+                        contador++;
+                    } else {
+                        System.out.println("El carrito está lleno.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("Finalizando la compra y saliendo del carrito...");
+                    break;
+            }
+        } while (opcion != 3);
+        finalizarCompra(carrito, contador);
+    }
+
+    private Object[] agregarPizza() {
+        System.out.println("\n--- AGREGAR PIZZA ---");
+        System.out.println("Seleccione el tipo de pizza:");
+        System.out.println("1.- Margarita - S/.8.00");
+        System.out.println("2.- Pepperoni - S/.10.00");
+        System.out.println("3.- Hawaiana - S/.9.50");
+        System.out.println("4.- Vegetariana - S/.9.00");
+        System.out.println("5.- Suprema - S/.11.00");
+        int opcion = validarEntradaNumerica(1, 5, "Ingrese una opción del 1 al 5:");
+        String producto = "";
+        double precio = 0.0;
+        switch (opcion) {
+            case 1:
+                producto = "Margarita";
+                precio = 8.00;
+                break;
+            case 2:
+                producto = "Pepperoni";
+                precio = 10.00;
+                break;
+            case 3:
+                producto = "Hawaiana";
+                precio = 9.50;
+                break;
+            case 4:
+                producto = "Vegetariana";
+                precio = 9.00;
+                break;
+            case 5:
+                producto = "Suprema";
+                precio = 11.00;
+                break;
+        }
+        System.out.println("Ingrese la cantidad de pizzas que desea agregar:");
+        int cantidad = validarEntradaNumerica(1, 50, "Ingrese un número entre 1 y 50:");
+        System.out.println(cantidad + " pizza(s) de " + producto + " agregadas al carrito.");
+        return crearProducto(producto, cantidad, precio, "Pizza");
+    }
+
+    private Object[] agregarComplemento() {
+        System.out.println("\n--- AGREGAR COMPLEMENTO ---");
+        System.out.println("Seleccione el complemento:");
+        System.out.println("1.- Refresco - S/.2.50");
+        System.out.println("2.- Agua Mineral - S/.1.50");
+        System.out.println("3.- Tiramisu - S/.4.00");
+        System.out.println("4.- Helado - S/.3.50");
+        int opcion = validarEntradaNumerica(1, 4, "Ingrese una opción del 1 al 4:");
+        String producto = "";
+        double precio = 0.0;
+        switch (opcion) {
+            case 1:
+                producto = "Refresco";
+                precio = 2.50;
+                break;
+            case 2:
+                producto = "Agua Mineral";
+                precio = 1.50;
+                break;
+            case 3:
+                producto = "Tiramisu";
+                precio = 4.00;
+                break;
+            case 4:
+                producto = "Helado";
+                precio = 3.50;
+                break;
+        }
+        System.out.println("Ingrese la cantidad que desea agregar:");
+        int cantidad = validarEntradaNumerica(1, 50, "Ingrese un número entre 1 y 50:");
+        System.out.println(cantidad + " " + producto + " agregados al carrito.");
+        return crearProducto(producto, cantidad, precio, "Complemento");
+    }
+
+    private void finalizarCompra(Object[][] carrito, int cantidadProductos) {
+        double totalSinDescuento = 0.0;
+        System.out.println("\n--- RESUMEN DEL CARRITO ---");
+        for (int i = 0; i < cantidadProductos; i++) {
+            Object[] prod = carrito[i];
+            String nombre = (String) prod[0];
+            int cantidad = (int) prod[1];
+            double precio = (double) prod[2];
+            String categoria = (String) prod[3];
+            double totalProd = totalProducto(prod);
+            System.out.println(cantidad + " x " + nombre + " (" + categoria + ") - S/." + String.format("%.2f", totalProd));
+            totalSinDescuento += totalProd;
+        }
+        System.out.printf("Total sin descuento: S/.%.2f%n", totalSinDescuento);
+        boolean aplicarDescuento = totalSinDescuento >= 50;
+        double descuento = 0.0;
+        double totalConDescuento = totalSinDescuento;
+        if (aplicarDescuento) {
+            descuento = totalSinDescuento * 0.05;
+            totalConDescuento = totalSinDescuento - descuento;
+            System.out.println("Se aplicará un descuento del 5%: S/." + String.format("%.2f", descuento));
+            promocionDescuento();
+        }
+        System.out.printf("Total a pagar: S/.%.2f%n", totalConDescuento);
+        String metodoPago = obtenerMetodoPago();
+        double montoIngresado;
+        do {
+            System.out.println("Ingrese el monto a pagar:");
+            while (!entrada.hasNextDouble()) {
+                System.out.println("Debe ingresar un valor numérico.");
+                entrada.next();
+            }
+            montoIngresado = entrada.nextDouble();
+            if (montoIngresado < totalConDescuento) {
+                System.out.println("El monto ingresado es insuficiente. Intente nuevamente.");
+            }
+        } while (montoIngresado < totalConDescuento);
+        entrada.nextLine();
+        String[] datos = registrarDatos();
+        imprimirTicket(datos, carrito, cantidadProductos, totalSinDescuento, descuento, totalConDescuento, montoIngresado, metodoPago);
+    }
+
+    private void imprimirTicket(String[] datos, Object[][] carrito, int cantidadProductos, double totalSinDescuento, double descuento, double totalConDescuento, double montoIngresado, String metodoPago) {
+        double igv = totalConDescuento * 0.18;
+        double subtotal = totalConDescuento - igv;
+        double vuelto = montoIngresado - totalConDescuento;
+        System.out.println("\n--- TICKET DE VENTA ---");
+        System.out.println("Cliente: " + datos[0]);
+        System.out.println("DNI: " + datos[1]);
+        System.out.println("Dirección: " + datos[2]);
+        System.out.println("Teléfono: " + datos[3]);
+        System.out.println("\nProductos adquiridos:");
+        for (int i = 0; i < cantidadProductos; i++) {
+            Object[] prod = carrito[i];
+            String nombre = (String) prod[0];
+            int cantidad = (int) prod[1];
+            String categoria = (String) prod[3];
+            System.out.println(cantidad + " x " + nombre + " (" + categoria + ") => S/." + String.format("%.2f", totalProducto(prod)));
+        }
+        System.out.printf("\nTotal sin descuento: S/.%.2f%n", totalSinDescuento);
+        if (descuento > 0) {
+            System.out.printf("Descuento (5%%): S/.%.2f%n", descuento);
+        }
+        System.out.printf("Total a pagar: S/.%.2f%n", totalConDescuento);
+        System.out.printf("IGV (18%%): S/.%.2f%n", igv);
+        System.out.printf("Subtotal: S/.%.2f%n", subtotal);
+        System.out.printf("Monto pagado: S/.%.2f%n", montoIngresado);
+        System.out.printf("Vuelto: S/.%.2f%n", vuelto);
+        System.out.println("Método de pago: " + metodoPago);
+    }
+
+    private void promocionDescuento() {
+        System.out.println("\n¡Felicitaciones! Ha obtenido un descuento del 5% en su compra.");
+        System.out.println("Además, recibe un regalo exclusivo: una bebida gratis.");
+        System.out.println("Bebidas disponibles actualmente: Coca-Cola, Fanta, Sprite, Inka Cola.");
+        System.out.println("Ingrese el nombre de la bebida que desea recibir:");
+        String bebida = entrada.nextLine();
+        System.out.println("¡Disfrute su " + bebida + " gratis!");
+    }
+
+    private String[] registrarDatos() {
+        String[] datos = new String[4];
+        System.out.println("\n--- DATOS DEL CLIENTE ---");
+        System.out.print("Ingrese su nombre: ");
+        datos[0] = entrada.nextLine();
+        System.out.print("Ingrese su DNI: ");
+        datos[1] = entrada.nextLine();
+        System.out.print("Ingrese su dirección: ");
+        datos[2] = entrada.nextLine();
+        System.out.print("Ingrese su número de teléfono: ");
+        datos[3] = entrada.nextLine();
+        return datos;
+    }
+
+    public void sistemaVenta() {
+        registrarCuenta();
+        if (iniciarSesion()) {
+            menuPrincipal();
+        }
+    }
+
+    public static void main(String[] args) {
+        PizzaHot pizzaHot = new PizzaHot();
+        pizzaHot.sistemaVenta();
+    }
+}
