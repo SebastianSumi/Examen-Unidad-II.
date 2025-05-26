@@ -270,7 +270,6 @@ public class PizzaHut {
     int [] carritoBebidas6=new int [3];
     double []subtotal_Bebidas6={0, 0, 0};
     public void MenuPrincipal(String Ubicaccion){
-        System.out.println("---Bienvenido a Pizza Hut---");
         int opcciones;
         int hola;
         switch (Ubicaccion.toUpperCase()) {
