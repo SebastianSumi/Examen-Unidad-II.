@@ -4,8 +4,6 @@ import java.util.Random;
 public class PizzaHut {
     public Scanner sc = new Scanner(System.in);
     private String Ubic;
-    public int precio;
-    public String producto;
 
     private int ValidarEntradaNumerica(int min, int max, String mensaje) {
         int valor;
@@ -62,7 +60,7 @@ public class PizzaHut {
         }
         else {
             Random rand = new Random();
-            opcion = rand.nextInt(6);
+            opcion = rand.nextInt(6)+1;
             Ubi = generarMenu(opcion);
             Ubic = Ubi;
             sistema();
@@ -941,7 +939,7 @@ public class PizzaHut {
         System.out.println("Que desea hacer ahora??");
         System.out.println("1.- Elegir otra pizza cerca de mi ubicaccion");
         System.out.println("2.- Pagar");
-        System.out.println("3.- Ir al menu principal");
+        System.out.println("3.- Seleccionar otra ubicación");
         opccion=ValidarEntradaNumerica(1,3,"Ingrese una opccion del 1-3");
         switch (opccion){
             case 1:
@@ -951,7 +949,7 @@ public class PizzaHut {
                 System.out.println("Comida gratis para todos!!");
                 break;
             case 3:
-                MenuPrincipal(Ubic);
+                mostrarMenu();
                 break;
         }
     }
