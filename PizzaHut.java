@@ -4,7 +4,7 @@ import java.util.Random;
 public class PizzaHut {
     public Scanner sc = new Scanner(System.in);
 
-    private int validarEntradaNumerica(int min, int max, String mensaje) {
+    private int ValidarEntradaNumerica(int min, int max, String mensaje) {
         int valor;
         do {
             System.out.println(mensaje);
@@ -47,7 +47,7 @@ public class PizzaHut {
         String Ubi;
         int opcion;
         double cargo;
-        opcion = validarEntradaNumerica(1,6,"Seleccione su ubicación:");
+        opcion = ValidarEntradaNumerica(1,6,"Seleccione su ubicación:");
         if (opcion >= 1 && opcion <= 5) {
             Ubi = generarMenu(opcion);
             cargo= aplicarCargo(opcion);
@@ -71,7 +71,7 @@ public class PizzaHut {
 
     public double cargoEntrega (String Ubi, double cargo){
         int opcion;
-        opcion = validarEntradaNumerica(1,2,"Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
+        opcion = ValidarEntradaNumerica(1,2,"Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
         switch (opcion){
             case 1:
                 return cargo;
