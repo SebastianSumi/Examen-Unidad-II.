@@ -3,6 +3,7 @@ import java.util.Random;
 
 public class PizzaHut {
     public Scanner sc = new Scanner(System.in);
+    public double  Cargo;
     private String Ubic;
 
     private int ValidarEntradaNumerica(int min, int max, String mensaje) {
@@ -80,6 +81,8 @@ public class PizzaHut {
         opcion = ValidarEntradaNumerica(1,2,"Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
         switch (opcion){
             case 1:
+                Cargo = cargo;
+                System.out.println("El cargo de entrega a domicilio es: s/."+Cargo);
                 return cargo;
             case 2:
                 System.out.println("Lo esperamos en: Av. Horizonte Sur 1234, Salida Arequipa, Juliaca");
