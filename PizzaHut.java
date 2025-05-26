@@ -28,9 +28,9 @@ public class PizzaHut {
     public String generarMenu( int i) {
         String Ubi;
         String[] ubicaciones = {
-                "Centro de la ciudad",
-                "Salida Huancané",
-                "Salida Cuzco",
+                "Centro de Juliaca",
+                "Salida Huancane",
+                "Salida Cusco",
                 "Salida Puno",
                 "Salida Arequipa",
                 "Salida Lampa",
