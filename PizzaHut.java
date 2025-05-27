@@ -1,10 +1,16 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.util.regex.Pattern;
+import java.lang.Math;
 
 public class PizzaHut {
     public Scanner sc = new Scanner(System.in);
     public double  Cargo;
-    private String Ubic;
+    private String Ubic, name;
+    public double TOTAL;
+    public String ProductoSelec;
+    public int Contador=0;
+    public int opion;
 
     private int ValidarEntradaNumerica(int min, int max, String mensaje) {
         int valor;
@@ -20,6 +26,22 @@ public class PizzaHut {
         } while (valor < min || valor > max);
         return valor;
     }
+
+    private double ValidarEntradaNumerica2(int min, String mensaje) {
+        double valor;
+        do {
+            System.out.println(mensaje);
+            while (!sc.hasNextInt()) {
+                System.out.println("Debe ingresar un número válido.");
+                sc.next();
+                System.out.println(mensaje);
+            }
+            valor = sc.nextInt();
+            sc.nextLine();
+        } while (valor < min);
+        return valor;
+    }
+
     public String generarOpcion(String Ubi, int i) {
         return "(" + i + ")-" + Ubi;
     }
@@ -54,9 +76,8 @@ public class PizzaHut {
         if (opcion >= 1 && opcion <= 6) {
             Ubi = generarMenu(opcion);
             Ubic = Ubi;
+            opion=opcion;
             sistema();
-            cargo= aplicarCargo(opcion);
-            cargoEntrega(Ubi, cargo);
             return Ubi;
         }
         else {
@@ -64,25 +85,27 @@ public class PizzaHut {
             opcion = rand.nextInt(6)+1;
             Ubi = generarMenu(opcion);
             Ubic = Ubi;
+            opion=opcion;
             sistema();
-            cargo = aplicarCargo(opcion);
-            cargoEntrega(Ubi, cargo);
             return Ubi;
         }
     }
 
-    public double aplicarCargo (int cargo){
+    public double aplicarCargo (){
         int km [] = {3,8,5,6,0,9};
-        return km[cargo]*0.3;
+        return km[opion]*0.3;
     }
 
-    public double cargoEntrega (String Ubi, double cargo){
+    public double cargoEntrega (){
         int opcion;
+        double cargo;
         opcion = ValidarEntradaNumerica(1,2,"Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
         switch (opcion){
             case 1:
+                cargo = aplicarCargo();
                 Cargo = cargo;
                 System.out.println("El cargo de entrega a domicilio es: s/."+Cargo);
+                TOTAL=TOTAL+Cargo;
                 return cargo;
             case 2:
                 System.out.println("Lo esperamos en: Av. Horizonte Sur 1234, Salida Arequipa, Juliaca");
@@ -96,6 +119,18 @@ public class PizzaHut {
 
     //
 
+
+
+    public void seleccionarProducto(String producto, double precio) {
+        if (ProductoSelec == null || ProductoSelec.isEmpty()) {
+            ProductoSelec = producto;
+        } else {
+            ProductoSelec += " + " + producto;
+        }
+        TOTAL += precio;
+        System.out.println("Producto agregado: " + producto);
+        System.out.println("Total actual: S/ " + TOTAL);
+    }
 
     Scanner entrada=new Scanner (System.in);
     //Menu 1.- Favoritos del mes
@@ -272,6 +307,7 @@ public class PizzaHut {
     double[] PrecioBebidas6 = {12.3,5.2,8.7};
     int [] carritoBebidas6=new int [3];
     double []subtotal_Bebidas6={0, 0, 0};
+
     public void MenuPrincipal(String Ubicaccion){
         int opcciones;
         int hola;
@@ -524,6 +560,7 @@ public class PizzaHut {
                 break;
         }
     }
+
     public int Menus(String [] menu, double [] precio){
         int opccion;
         for (int i = 0; i < menu.length; i++) {
@@ -533,6 +570,7 @@ public class PizzaHut {
         int opccionSeleccionada=opccion-1;
         return opccionSeleccionada;
     }
+
     public int Opcciones (){
         int opccion;
         System.out.println("1.- Lo nuevo");
@@ -545,397 +583,568 @@ public class PizzaHut {
         opccion = ValidarEntradaNumerica(1,6,"Ingrese un valor del 1 al 6");
         return opccion;
     }
-    public void compras(int opccion){
 
-    }
     public void CompraLoNuevo1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuLoNuevo1[opccion] += cantidad;
         subtotal_LoNuevo1[opccion]=carritomenuLoNuevo1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuLoNuevo1[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraLoNuevo2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuLoNuevo2[opccion] += cantidad;
         subtotal_LoNuevo2[opccion]=carritomenuLoNuevo2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuLoNuevo2[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraLoNuevo3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuLoNuevo3[opccion] += cantidad;
         subtotal_LoNuevo3[opccion]=carritomenuLoNuevo3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuLoNuevo3[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraLoNuevo4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuLoNuevo4[opccion] += cantidad;
         subtotal_LoNuevo4[opccion]=carritomenuLoNuevo4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuLoNuevo4[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraLoNuevo5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuLoNuevo5[opccion] += cantidad;
         subtotal_LoNuevo5[opccion]=carritomenuLoNuevo5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuLoNuevo5[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraLoNuevo6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuLoNuevo6[opccion] += cantidad;
         subtotal_LoNuevo6[opccion]=carritomenuLoNuevo6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuLoNuevo6[opccion]+" de " +menu[opccion]);
     }
+
     //PideAhora
+
     public void CompraPideAhora1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuPideAhora1[opccion] += cantidad;
         subtotal_PideAhora1[opccion]=carritomenuPideAhora1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuPideAhora1[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraPideAhora2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuPideAhora2[opccion] += cantidad;
         subtotal_PideAhora2[opccion]=carritomenuPideAhora2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuPideAhora2[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraPideAhora3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuPideAhora3[opccion] += cantidad;
         subtotal_PideAhora3[opccion]=carritomenuPideAhora3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuPideAhora3[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraPideAhora4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuPideAhora4[opccion] += cantidad;
         subtotal_PideAhora4[opccion]=carritomenuPideAhora4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuPideAhora4[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraPideAhora5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuPideAhora5[opccion] += cantidad;
         subtotal_PideAhora5[opccion]=carritomenuPideAhora5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuPideAhora5[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraPideAhora6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuPideAhora6[opccion] += cantidad;
         subtotal_PideAhora6[opccion]=carritomenuPideAhora6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuPideAhora6[opccion]+" de " +menu[opccion]);
     }
+
     //MegaPrmos
+
     public void CompraMegaPromos1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuMegaPromos1[opccion] += cantidad;
         subtotal_MegaPromos1[opccion]=carritomenuMegaPromos1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuMegaPromos1[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraMegaPromos2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuMegaPromos2[opccion] += cantidad;
         subtotal_MegaPromos2[opccion]=carritomenuMegaPromos2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuMegaPromos2[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraMegaPromos3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuMegaPromos3[opccion] += cantidad;
         subtotal_MegaPromos3[opccion]=carritomenuMegaPromos3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuMegaPromos3[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraMegaPromos4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuMegaPromos4[opccion] += cantidad;
         subtotal_MegaPromos4[opccion]=carritomenuMegaPromos4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuMegaPromos4[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraMegaPromos5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuMegaPromos5[opccion] += cantidad;
         subtotal_MegaPromos5[opccion]=carritomenuMegaPromos5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuMegaPromos5[opccion]+" de " +menu[opccion]);
 
     }
+
     public void CompraMegaPromos6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuMegaPromos6[opccion] += cantidad;
         subtotal_MegaPromos6[opccion]=carritomenuMegaPromos6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuMegaPromos6[opccion]+" de " +menu[opccion]);
 
     }
+
     //ExclusivasWeb
+
     public void CompraExclusivasWeb1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuExclusivasWeb1[opccion] += cantidad;
         subtotal_ExclusivasWeb1[opccion]=carritomenuExclusivasWeb1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuExclusivasWeb1[opccion]+" de " +menu[opccion]);
 
     }
+
     public void CompraExclusivasWeb2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuExclusivasWeb2[opccion] += cantidad;
         subtotal_ExclusivasWeb2[opccion]=carritomenuExclusivasWeb2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuExclusivasWeb2[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraExclusivasWeb3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuExclusivasWeb3[opccion] += cantidad;
         subtotal_ExclusivasWeb3[opccion]=carritomenuExclusivasWeb3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuExclusivasWeb3[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraExclusivasWeb4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuExclusivasWeb4[opccion] += cantidad;
         subtotal_ExclusivasWeb4[opccion]=carritomenuExclusivasWeb4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuExclusivasWeb4[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraExclusivasWeb5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuExclusivasWeb5[opccion] += cantidad;
         subtotal_ExclusivasWeb5[opccion]=carritomenuExclusivasWeb5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuExclusivasWeb5[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraExclusivasWeb6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuExclusivasWeb6[opccion] += cantidad;
         subtotal_ExclusivasWeb6[opccion]=carritomenuExclusivasWeb6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuExclusivasWeb6[opccion]+" de " +menu[opccion]);
     }
+
     //Paramí
+
     public void CompraParamí1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuParamí1[opccion] += cantidad;
         subtotal_Paramí1[opccion]=carritomenuParamí1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuParamí1[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraParamí2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuParamí2[opccion] += cantidad;
         subtotal_Paramí2[opccion]=carritomenuParamí2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuParamí2[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraParamí3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuParamí3[opccion] += cantidad;
         subtotal_Paramí3[opccion]=carritomenuParamí3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuParamí3[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraParamí4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuParamí4[opccion] += cantidad;
         subtotal_Paramí4[opccion]=carritomenuParamí4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuParamí4[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraParamí5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuParamí5[opccion] += cantidad;
         subtotal_Paramí5[opccion]=carritomenuParamí5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuParamí5[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraParamí6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuParamí6[opccion] += cantidad;
         subtotal_Paramí6[opccion]=carritomenuParamí6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuParamí6[opccion]+" de " +menu[opccion]);
     }
+
     //Antojitos
+
     public void Antojitos1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuAntojitos1[opccion] += cantidad;
         subtotal_Antojitos1[opccion]=carritomenuAntojitos1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuAntojitos1[opccion]+" de " +menu[opccion]);
     }
+
     public void Antojitos2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuAntojitos2[opccion] += cantidad;
         subtotal_Antojitos2[opccion]=carritomenuAntojitos2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuAntojitos2[opccion]+" de " +menu[opccion]);
     }
+
     public void Antojitos3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuAntojitos3[opccion] += cantidad;
         subtotal_Antojitos3[opccion]=carritomenuAntojitos3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuAntojitos3[opccion]+" de " +menu[opccion]);
     }
+
     public void Antojitos4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuAntojitos4[opccion] += cantidad;
         subtotal_Antojitos4[opccion]=carritomenuAntojitos4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuAntojitos4[opccion]+" de " +menu[opccion]);
     }
+
     public void Antojitos5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuAntojitos5[opccion] += cantidad;
         subtotal_Antojitos5[opccion]=carritomenuAntojitos5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuAntojitos5[opccion]+" de " +menu[opccion]);
     }
+
     public void Antojitos6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritomenuAntojitos6[opccion] += cantidad;
         subtotal_Antojitos6[opccion]=carritomenuAntojitos6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritomenuAntojitos6[opccion]+" de " +menu[opccion]);
     }
 
     //Bebidas
+
     public void CompraBebidas1(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritoBebidas1[opccion] += cantidad;
         subtotal_Bebidas1[opccion]=carritoBebidas1[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritoBebidas1[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraBebidas2(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritoBebidas2[opccion] += cantidad;
         subtotal_Bebidas2[opccion]=carritoBebidas2[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritoBebidas2[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraBebidas3(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritoBebidas3[opccion] += cantidad;
         subtotal_Bebidas3[opccion]=carritoBebidas3[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritoBebidas3[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraBebidas4(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritoBebidas4[opccion] += cantidad;
         subtotal_Bebidas4[opccion]=carritoBebidas4[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritoBebidas4[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraBebidas5(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritoBebidas5[opccion] += cantidad;
         subtotal_Bebidas5[opccion]=carritoBebidas5[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritoBebidas5[opccion]+" de " +menu[opccion]);
     }
+
     public void CompraBebidas6(int opccion, String [] menu,double [] precio){
         int cantidad;
         System.out.println("Cuantas comidas comprara de "+menu[opccion]+"?.  Ingrese la cantidad");
         cantidad=ValidarEntradaNumerica(0,15,"Para compras mayores a 15 platos llamar al +51 974 261 517");
         carritoBebidas6[opccion] += cantidad;
         subtotal_Bebidas6[opccion]=carritoBebidas6[opccion]*precio[opccion];
+        double totalProducto = cantidad * precio[opccion];
+        String nombreProducto = cantidad + "x " + menu[opccion];
+        seleccionarProducto(nombreProducto, totalProducto);
         System.out.println("Compra realizada con exito!!..");
         System.out.println("Ud a compradao"+ carritoBebidas6[opccion]+" de " +menu[opccion]);
     }
+
     public void menusito(){
         int opccion;
         System.out.println("Que desea hacer ahora??");
@@ -948,19 +1157,226 @@ public class PizzaHut {
                 MenuPrincipal(Ubic);
                 break;
             case 2:
-                System.out.println("Comida gratis para todos!!");
+                boletaVenta();
                 break;
             case 3:
                 mostrarMenu();
                 break;
         }
     }
+
     public void sistema(){
         MenuPrincipal(Ubic);
     }
 
+//
+
+    String emailGuardado, contraseñaGuardada;
+
+    private boolean validarCorreo(String email) {
+        String regex = "^[\\w.-]+@[\\w.-]+\\.com$";
+        return Pattern.compile(regex).matcher(email).matches();
+    }
+
+    private boolean validarPassword(String password) {
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@&%$#!?*])[A-Za-z\\d@&%$#!?*]{8,}$";
+        return Pattern.compile(regex).matcher(password).matches();
+    }
+
+    public void registrarCuenta() {
+        String email, contraseña;
+        System.out.println("Ingrese su nombre");
+        name = sc.nextLine();
+        do {
+            System.out.println("Ingrese su correo electrónico:");
+            email = entrada.nextLine();
+            if (!validarCorreo(email)) {
+                System.out.println("El correo ingresado no es válido. Debe contener '@' y terminar en .com");
+            }
+        } while (!validarCorreo(email));
+        do {
+            System.out.println("Ingrese su contraseña (mínimo 8 caracteres, letras, números y caracteres especiales):");
+            contraseña = entrada.nextLine();
+            if (!validarPassword(contraseña)) {
+                System.out.println("La contraseña no cumple con los requisitos.");
+            }
+        } while (!validarPassword(contraseña));
+        System.out.println("Gracias por registrarse. Ahora puede iniciar sesión.");
+        emailGuardado = email;
+        contraseñaGuardada = contraseña;
+    }
+
+    public boolean iniciarSesion() {
+        String email, contraseña;
+        int intentos = 4;
+        while (intentos > 0) {
+            System.out.println("\n--- INICIO DE SESIÓN ---");
+            System.out.println("Ingrese su correo electrónico:");
+            email = entrada.nextLine();
+            System.out.println("Ingrese su contraseña:");
+            contraseña = entrada.nextLine();
+            if (email.equals(emailGuardado) && contraseña.equals(contraseñaGuardada)) {
+                System.out.println("Inicio de sesión correcto. ¡Bienvenido a Pizza Hut! " +name);
+                return true;
+            } else {
+                intentos--;
+                System.out.println("Inicio de sesión fallido. Le quedan " + intentos + " intentos.");
+            }
+        }
+        System.out.println("No se pudo acceder al sistema.");
+        return false;
+    }
+
+    public double vago (){
+        double depocito = ValidarEntradaNumerica2(0,"Depocite el monto:");
+        return pago(depocito);
+    }
+
+    public void boletaVenta (){
+        double IGV, subTotal, depocito, pago, vuelto, total;
+        cargoEntrega();
+        total=TOTAL;
+        IGV=TOTAL*0.18;
+        subTotal=TOTAL-IGV;
+        System.out.println("Monto a depocitar: s/."+total);
+        vago();
+        if (TOTAL>0){
+            System.out.println("Monto insuficiente");
+            vago();
+        }
+            vuelto=Math.abs(TOTAL);
+            System.out.println("-Boleta de venta-");
+            System.out.println("Usuario: "+name);
+            System.out.println("Producto: "+ProductoSelec);
+            System.out.println("Total a pagar: s/."+total);
+            System.out.println("Subtotal: s/."+subTotal);
+            System.out.println("IGV: s/."+IGV);
+            System.out.println("Cargo de delivery: s/."+Cargo);
+            System.out.println("Vuelto: "+vuelto);
+    }
+
+    public double pago (double dep){
+        TOTAL=TOTAL-dep;
+        if (TOTAL==0){
+            return 0;
+        }
+        else if (TOTAL>0){
+            return TOTAL;
+        }
+        else {
+            return TOTAL;
+        }
+    }
+
+//
+
+    String[] nombres = new String[100];
+    String[] dnis = new String[100];
+    String[] descripciones = new String[100];
+    String[] fechas = new String[100];
+
+    int contador = 0;
+    Scanner scanner = new Scanner(System.in);
+    int opcion;
+    public int Reclamaciones (){
+        do {
+        opcion = ValidarEntradaNumerica(1,3, "\n=== Libro de Reclamaciones ===\n1. Registrar Reclamo\n2. Listar Reclamos \n3. Salir \nSeleccione una opción: ");
+        return opcion;
+    } while (opcion != 3);
+    }
+    private void reclamosRegis (int contador){
+        if (contador == 0) {
+            System.out.println("No hay reclamos registrados.");
+        } else {
+            System.out.println("\n=== Lista de Reclamos ===");
+            for (int i = 0; i < contador; i++) {
+                System.out.println("📌 Reclamo " + (i + 1));
+                System.out.println("Cliente: " + nombres[i]);
+                System.out.println("DNI: " + dnis[i]);
+                System.out.println("Descripción: " + descripciones[i]);
+                System.out.println("Fecha: " + fechas[i]);
+                System.out.println("----------------------------");
+            }
+        }
+    }
+
+    public void registrarRecl (int opcion){
+        Reclamaciones();
+        switch (opcion) {
+            case 1:
+                if (contador < 100) {
+                    System.out.print("Nombre del Cliente: ");
+                    nombres[contador] = scanner.nextLine();
+
+                    System.out.print("DNI: ");
+                    dnis[contador] = scanner.nextLine();
+
+                    System.out.print("Descripción del Reclamo: ");
+                    descripciones[contador] = scanner.nextLine();
+
+                    System.out.print("Fecha (dd/mm/aaaa): ");
+                    fechas[contador] = scanner.nextLine();
+
+                    contador++;
+                    Contador = contador;
+                    System.out.println("Reclamo registrado con éxito.");
+                } else {
+                    System.out.println("No se pueden registrar más reclamos. Límite alcanzado.");
+                }
+                break;
+
+            case 2:
+                reclamosRegis(contador);
+                break;
+
+            case 3:
+                System.out.println("Saliendo del libro de reclamaciones...");
+                menu();
+                break;
+
+            default:
+                System.out.println("Opción inválida. Intente nuevamente.");
+        }
+
+    }
+
+    private void login (){
+        System.out.println("--BIENVENIDO A PIZZA HUT--");
+        System.out.println("Número de ayuda: tel:(01)505-1111");
+        System.out.println("Iniciando registro...");
+        registrarCuenta();
+        System.out.println("Iniciando sesión...");
+        iniciarSesion();}
+    public void menu (){
+        int opcion;
+        opcion = ValidarEntradaNumerica(1,2,"(1)-Pedir pizza y más\n(2)-Perfil\nSeleccionar una opción:");
+        switch (opcion){
+            case 1:
+                mostrarMenu();
+                break;
+            case 2:
+                System.out.println("Usuario: "+name);
+                System.out.println("Reclamaciones: ");
+                reclamosRegis(Contador);
+                menu();
+                break;
+        }
+        System.out.println("¿Tiene algún reclamo o sugerencia? SI/NO");
+        switch (sc.nextLine().toUpperCase()){
+            case "SI":
+                registrarRecl(1);
+                registrarRecl(2);
+                break;
+            case "NO":
+                sc.close();
+                break;
+            default:
+        }
+    }
+
     public static void main(String[] args) {
         PizzaHut pizzaHut = new PizzaHut();
-        pizzaHut.mostrarMenu();
+        pizzaHut.login();
+        pizzaHut.menu();
     }
 }
