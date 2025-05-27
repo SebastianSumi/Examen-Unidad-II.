@@ -1912,7 +1912,7 @@ public class PizzaHut {
 
     public static void main (String[]args){
         PizzaHut pizzaHut = new PizzaHut();
-
+        pizzaHut.login();
         pizzaHut.menu();
     }
 }
