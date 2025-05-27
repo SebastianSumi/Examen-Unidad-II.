@@ -1295,10 +1295,8 @@ public class PizzaHut {
     int opcion;
 
     public int Reclamaciones() {
-        do {
             opcion = ValidarEntradaNumerica(1, 3, "\n=== Libro de Reclamaciones ===\n1. Registrar Reclamo\n2. Listar Reclamos \n3. Salir \nSeleccione una opción: ");
             return opcion;
-        } while (opcion != 3);
     }
 
     private void reclamosRegis(int contador) {
@@ -1318,7 +1316,7 @@ public class PizzaHut {
     }
 
     public void registrarRecl(int opcion) {
-        Reclamaciones();
+        opcion = Reclamaciones();
         switch (opcion) {
             case 1:
                 if (contador < 100) {
