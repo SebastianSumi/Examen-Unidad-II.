@@ -80,7 +80,7 @@ public class PizzaHut {
         if (opcion >= 1 && opcion <= 6) {
             Ubi = generarMenu(opcion);
             Ubic = Ubi;
-            opion = opcion;
+            opion = opcion-1;
             sistema();
             return Ubi;
         } else {
@@ -88,7 +88,7 @@ public class PizzaHut {
             opcion = rand.nextInt(6) + 1;
             Ubi = generarMenu(opcion);
             Ubic = Ubi;
-            opion = opcion;
+            opion = opcion-1;
             sistema();
             return Ubi;
         }
