@@ -52,16 +52,15 @@ public class PizzaHut {
 
     public String generarMenu(int i) {
         String Ubi;
-        String[] ubicaciones = {
-                "Centro de Juliaca",
-                "Salida Huancane",
-                "Salida Cusco",
-                "Salida Puno",
-                "Salida Arequipa",
-                "Salida Lampa",
-                "Encuentre mi ubicación"
-        };
-        Ubi = ubicaciones[i - 1];
+        ArrayList <String> ubicaciones = new ArrayList<>();
+        ubicaciones.add("Centro de Juliaca");
+        ubicaciones.add("Salida Huancane");
+        ubicaciones.add("Salida Cusco");
+        ubicaciones.add("Salida Puno");
+        ubicaciones.add("Salida Arequipa");
+        ubicaciones.add("Salida Lampa");
+        ubicaciones.add("Encuentre mi ubicación");
+        Ubi = ubicaciones.get(i-1);
         return Ubi;
     }
 
