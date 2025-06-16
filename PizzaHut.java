@@ -65,7 +65,6 @@ public class PizzaHut {
     }
 
     public void mostrarMenu() {
-        System.out.println("---Bienvenido a Pizza Hut---");
         for (int i = 1; i <= 7; i++) {
             System.out.println(generarOpcion(generarMenu(i), i));
         }
