@@ -26,7 +26,7 @@ public class PizzaHut {
                 sc.next();
             }
             valor = sc.nextInt();
-            sc.nextLine();  // Limpiar buffer
+            sc.nextLine();
         } while (valor < min || valor > max);
         return valor;
     }
