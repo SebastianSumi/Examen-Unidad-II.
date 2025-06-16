@@ -94,8 +94,14 @@ public class PizzaHut {
     }
 
     public double aplicarCargo() {
-        int km[] = {3, 8, 5, 6, 0, 9};
-        return km[opion] * 0.3;
+        ArrayList <Integer> km = new ArrayList<>();
+        km.add(3); 
+        km.add(8); 
+        km.add(5); 
+        km.add(6); 
+        km.add(0); 
+        km.add(9);
+        return km.get(opion) * 0.3;
     }
 
     public double cargoEntrega() {
