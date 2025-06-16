@@ -1,9 +1,7 @@
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
 import java.util.regex.Pattern;
-import java.lang.Math;
 import java.util.ArrayList;
 
 public class PizzaHut {
@@ -15,9 +13,8 @@ public class PizzaHut {
     public String ProductoSelec;
     public int Contador = 0;
     public int opion;
-    String nombre;
 
-    private int ValidarEntradaNumerica(int min, int max, String mensaje) {
+    private int validarEntradaNumerica(int min, int max, String mensaje) {
         int valor;
         do {
             System.out.print(mensaje + ": ");
@@ -28,21 +25,6 @@ public class PizzaHut {
             valor = sc.nextInt();
             sc.nextLine();
         } while (valor < min || valor > max);
-        return valor;
-    }
-
-    private double ValidarEntradaNumerica2(int min, String mensaje) {
-        double valor;
-        do {
-            System.out.println(mensaje);
-            while (!sc.hasNextInt()) {
-                System.out.println("Debe ingresar un número válido.");
-                sc.next();
-                System.out.println(mensaje);
-            }
-            valor = sc.nextInt();
-            sc.nextLine();
-        } while (valor < min);
         return valor;
     }
 
@@ -75,7 +57,7 @@ public class PizzaHut {
         String Ubi;
         int opcion;
         double cargo;
-        opcion = ValidarEntradaNumerica(1, 6, "Seleccione su ubicación:");
+        opcion = validarEntradaNumerica(1, 6, "Seleccione su ubicación:");
         if (opcion >= 1 && opcion <= 6) {
             Ubi = generarMenu(opcion);
             Ubic = Ubi;
@@ -107,7 +89,7 @@ public class PizzaHut {
     public double cargoEntrega() {
         int opcion;
         double cargo;
-        opcion = ValidarEntradaNumerica(1, 2, "Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
+        opcion = validarEntradaNumerica(1, 2, "Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
         switch (opcion) {
             case 1:
                 cargo = aplicarCargo();
@@ -408,10 +390,10 @@ public class PizzaHut {
         todosSubtotales.add(subtotales);
     }
 
-    public void MenuPrincipal() {
+    public void menuPrincipal() {
         System.out.println("En Pizza Hut cerca a " + Ubic + " tenemos los siguientes menús: ");
 
-        int opcionCategoria = Opcciones();
+        int opcionCategoria = opcciones();
         int indiceMenu = obtenerIndiceMenu(opcionCategoria);
 
         if (indiceMenu >= 0 && indiceMenu < todosMenus.size()) {
@@ -442,10 +424,10 @@ public class PizzaHut {
         for (int i = 0; i < menu.size(); i++) {
             System.out.println((i + 1) + ". " + menu.get(i) + " - S/." + precios.get(i));
         }
-        return ValidarEntradaNumerica(1, menu.size(), "Seleccione un producto (1-" + menu.size() + ")") - 1;
+        return validarEntradaNumerica(1, menu.size(), "Seleccione un producto (1-" + menu.size() + ")") - 1;
     }
 
-    public int Opcciones() {
+    public int opcciones() {
         System.out.println("\nCATEGORÍAS DISPONIBLES:");
         System.out.println("1. Lo nuevo");
         System.out.println("2. Pide ahora");
@@ -454,7 +436,7 @@ public class PizzaHut {
         System.out.println("5. Para mí");
         System.out.println("6. Antojitos");
         System.out.println("7. Bebidas");
-        return ValidarEntradaNumerica(1, 7, "Seleccione una categoría (1-7)");
+        return validarEntradaNumerica(1, 7, "Seleccione una categoría (1-7)");
     }
 
     public void procesarCompra(int indiceMenu, int opcionProducto) {
@@ -464,7 +446,7 @@ public class PizzaHut {
         ArrayList<Double> subtotales = todosSubtotales.get(indiceMenu);
 
         System.out.println("¿Cuántos comidas de '" + menu.get(opcionProducto) + "'? ");
-        int cantidad = ValidarEntradaNumerica(0, 15, "Para compras mayores a 15 platos llamar al +51 974 261 517");
+        int cantidad = validarEntradaNumerica(0, 15, "Para compras mayores a 15 platos llamar al +51 974 261 517");
 
         int nuevaCantidad = carrito.get(opcionProducto) + cantidad;
         carrito.set(opcionProducto, nuevaCantidad);
@@ -480,9 +462,9 @@ public class PizzaHut {
         System.out.println("3. Volver al menú principal");
         System.out.println("4. Salir");
 
-        int opcion = ValidarEntradaNumerica(1, 4, "Seleccione una opción (1-4)");
+        int opcion = validarEntradaNumerica(1, 4, "Seleccione una opción (1-4)");
         switch (opcion) {
-            case 1: MenuPrincipal(); break;
+            case 1: menuPrincipal(); break;
             case 2: pagar(); break;
             case 3: mostrarMenu(); break;
             case 4: System.exit(0);
@@ -528,10 +510,9 @@ public class PizzaHut {
         menusito();
     }
 
-
     public void sistema() {
         inicializarDatos();
-        MenuPrincipal();
+        menuPrincipal();
     }
 
 //
@@ -552,11 +533,11 @@ public class PizzaHut {
         boolean esValida = tarjeta != null && tarjeta.matches("^[0-9]{16}$");
         return esValida;
     }
+
     public static boolean esCVVValido(String cvv) {
         boolean esValido = cvv != null && cvv.matches("^[0-9]{3}$");
         return esValido;
     }
-
 
     public void registrarCuenta() {
         String email, contraseña;
@@ -614,7 +595,6 @@ public class PizzaHut {
         System.out.println("Iniciando sesión...");
         iniciarSesion();
     }
-
 
     public void menu() {
         mostrarMenu();
