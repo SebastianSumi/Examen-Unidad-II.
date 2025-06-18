@@ -13,6 +13,8 @@ public class PizzaHut {
     public String ProductoSelec;
     public int Contador = 0;
     public int opion;
+    final String email_admin = "admin@pizzahut.com";
+    final String pass_admin = "1@holaHOLA";
 
     private int validarEntradaNumerica(int min, int max, String mensaje) {
         int valor;
@@ -42,40 +44,33 @@ public class PizzaHut {
         ubicaciones.add("Salida Arequipa");
         ubicaciones.add("Salida Lampa");
         ubicaciones.add("Encuentre mi ubicación");
-        Ubi = ubicaciones.get(i-1);
+        Ubi = ubicaciones.get(i);
         return Ubi;
     }
 
     public void mostrarMenu() {
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 0; i <= 7; i++) {
             System.out.println(generarOpcion(generarMenu(i), i));
         }
         seleccionarMenu();
     }
 
-    public String seleccionarMenu() {
-        String Ubi;
+    public void seleccionarMenu() {
         int opcion;
         double cargo;
-        opcion = validarEntradaNumerica(1, 6, "Seleccione su ubicación:");
-        if (opcion >= 1 && opcion <= 6) {
-            Ubi = generarMenu(opcion);
-            Ubic = Ubi;
-            opion = opcion-1;
-            sistema();
-            return Ubi;
+        opcion = validarEntradaNumerica(0, 6, "Seleccione su ubicación:");
+        if (opcion >= 0 && opcion < 6) {
+            Ubic = generarMenu(opcion);
+            Cargo = aplicarCargo(opcion);
         } else {
             Random rand = new Random();
-            opcion = rand.nextInt(6) + 1;
-            Ubi = generarMenu(opcion);
-            Ubic = Ubi;
-            opion = opcion-1;
-            sistema();
-            return Ubi;
+            opcion = rand.nextInt(6);
+            Ubic = generarMenu(opcion);
+            Cargo = aplicarCargo(opcion);
         }
     }
 
-    public double aplicarCargo() {
+    public double aplicarCargo(int i) {
         ArrayList <Integer> km = new ArrayList<>();
         km.add(3);
         km.add(8);
@@ -83,7 +78,7 @@ public class PizzaHut {
         km.add(6);
         km.add(0);
         km.add(9);
-        return km.get(opion) * 0.3;
+        return km.get(i) * 0.3;
     }
 
     public double cargoEntrega() {
@@ -92,11 +87,9 @@ public class PizzaHut {
         opcion = validarEntradaNumerica(1, 2, "Seleccione entre:\n(1)-Entrega a Domicilio\n(2)-Recoger en local");
         switch (opcion) {
             case 1:
-                cargo = aplicarCargo();
-                Cargo = cargo;
                 System.out.println("El cargo de entrega a domicilio es: s/." + Cargo);
                 TOTAL = TOTAL + Cargo;
-                return cargo;
+                return Cargo;
             case 2:
                 System.out.println("Lo esperamos en: Av. Horizonte Sur 1234, Salida Arequipa, Juliaca");
                 return 0;
@@ -511,8 +504,6 @@ public class PizzaHut {
     }
 
     public void sistema() {
-        inicializarDatos();
-        menuPrincipal();
     }
 
 //
@@ -588,21 +579,60 @@ public class PizzaHut {
 //
 
     private void login() {
-        System.out.println("--BIENVENIDO A PIZZA HUT--");
-        System.out.println("Número de ayuda: tel:(01)505-1111");
-        System.out.println("Iniciando registro...");
-        registrarCuenta();
-        System.out.println("Iniciando sesión...");
-        iniciarSesion();
+        switch (validarEntradaNumerica(1,3,"Inicie sesión como:\n(1)-Administrador\n(2)-Vendedor\n(3)-Cliente")){
+            case 1:
+                ventanaAdministrador();
+                break;
+        }
     }
 
     public void menu() {
         mostrarMenu();
     }
 
+    public void ventanaAdministrador(){
+        int contador=3;
+        int swt;
+        String email, contraseña;
+        do{
+            System.out.println("Ingrese su correo electrónico");
+            email = sc.nextLine();
+            System.out.println("Ingrese su contraseña:");
+            contraseña = sc.nextLine();
+            if(email!=email_admin||contraseña!=pass_admin){
+                System.out.println("Datos incorrectos");
+                contador--;
+                System.out.println("Intentos restantes "+contador);
+            }
+            if(contador==0){
+                sc.close();
+            }
+        }while (email!=email_admin||contraseña!=pass_admin);
+        inicializarDatos();
+        do{
+            switch (swt= validarEntradaNumerica(1,4,"(1)-Ver productos\n(2)-Agregar producto\n(3)-Modificar producto\n(4)-Salir")){
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    System.out.println("Volviendo al menú principal");
+                    break;
+            }
+        }while (swt!=4);
+    }
+
+    public void verProducto (){
+
+    }
+
     public static void main (String[]args){
         PizzaHut pizzaHut = new PizzaHut();
+        System.out.println("--BIENVENIDO A PIZZA HUT--");
+        System.out.println("Número de ayuda: tel:(01)505-1111");
+        pizzaHut.mostrarMenu();
         pizzaHut.login();
-        pizzaHut.menu();
     }
 }
