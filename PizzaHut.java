@@ -583,6 +583,10 @@ public class PizzaHut {
             case 1:
                 ventanaAdministrador();
                 break;
+            case 2:
+                break;
+            case 3:
+                break;
         }
     }
 
