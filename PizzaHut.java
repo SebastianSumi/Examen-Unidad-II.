@@ -426,8 +426,7 @@ public class PizzaHut {
             case 3: MenuPrincipal(Ubic); break;
             case 4: System.exit(0);
         }
-    }
-    public void metodosDePago(double total){
+    }public void metodosDePago(double total){
         System.out.println("elige el metodo de pago");
         System.out.println("1.- efectivo");
         System.out.println("2.- pago tarjeta");
@@ -436,11 +435,39 @@ public class PizzaHut {
         switch (opcion){
             case 1:
                 System.out.println("ingrese el monto a pagar");
-                double pago = sc.nextDouble();
+                double pago = entrada.nextDouble();
                 BOLETA(total,pago);
                 break;
-        }
 
+            default:
+                String tarjeta;
+                String cvv;
+                do {
+                    System.out.println("ingrese su numero de tarjeta ");
+                    tarjeta=entrada.nextLine();
+                    if (!esTarjetaValida(tarjeta)){
+                        System.out.println("Tarjeta invalida");
+                    }
+                }
+                while (
+                        !esTarjetaValida(tarjeta)
+                );
+                do {
+                    System.out.println("ingrese su numero de cvv ");
+                    cvv=entrada.nextLine();
+                    if (!esCVVValido(cvv)){
+                        System.out.println("cvv invalida");
+                    }
+
+                }
+                while (
+                        !esCVVValido(cvv)
+                );
+                System.out.println("ingrese el monto a pagar");
+                pago = entrada.nextDouble();
+                BOLETA(total,pago);
+
+        }
     }
     public static boolean esTarjetaValida(String tarjeta) {
         boolean esValida = tarjeta != null && tarjeta.matches("^[0-9]{16}$");
