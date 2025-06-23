@@ -448,11 +448,6 @@ public class PizzaHut {
                 double pago = sc.nextDouble();
                 BOLETA(total,pago);
                 break;
-
-            default:
-
-
-
         }
 
     }
@@ -628,7 +623,7 @@ public class PizzaHut {
         switch (opccion){
             case 1:
                 Registrarse();
-                soyCliente();
+                iniciarSesion();
                 break;
             case 2:
                 iniciarSesion();
@@ -672,7 +667,7 @@ public class PizzaHut {
         }
         if (correo.equals(email_admin)&&contraseña.equals(pass_admin)){
             System.out.println("Inicio de sesion exitoso puede, acceder");
-            Vendedor();
+            administrador();
         }
         else {
             System.out.println("Inicio de sesion fallido");
@@ -710,6 +705,18 @@ public class PizzaHut {
             }
         }while (swt!=3);
     }
+    public void modificarProducto(){
+        int opcion;
+        System.out.println("Ingrese la categoria en la que desea agregar productos");
+        opcion = Opcciones();
+        int indice = obtenerIndiceMenu(Ubic,opcion);
+        System.out.println("Ingrese el nombre del producto");
+        int index = todosMenus.get(indice).indexOf(sc.nextLine());
+        System.out.println("Ingrese el nuevo nombre del producto");
+        todosMenus.get(indice).set(index,sc.nextLine());
+        System.out.println("Ingrese el nuevo precio del producto");
+        todosPrecios.get(indice).set(index,sc.nextDouble());
+    }
     public void administrador(){
         int opcion;
         do{
@@ -725,6 +732,7 @@ public class PizzaHut {
                     agregarProducto();
                     break;
                 case 3:
+                    modificarProducto();
                     break;
                 default:
                     System.out.println("Opcion no valida");
@@ -733,5 +741,7 @@ public class PizzaHut {
         }while (opcion!=3);
     }
     public static void main(String[] args) {
+        PizzaHut PH = new PizzaHut();
+        PH.sistema();
     }
 }
