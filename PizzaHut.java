@@ -433,9 +433,38 @@ public class PizzaHut {
         switch (opcion){
             case 1:
                 System.out.println("ingrese el monto a pagar");
-                double pago = sc.nextDouble();
+                double pago = entrada.nextDouble();
                 BOLETA(total,pago);
                 break;
+
+            default:
+                String tarjeta;
+                String cvv;
+                do {
+                    System.out.println("ingrese su numero de tarjeta ");
+                    tarjeta=entrada.nextLine();
+                    if (!esTarjetaValida(tarjeta)){
+                        System.out.println("Tarjeta invalida");
+                    }
+                }
+                while (
+                        !esTarjetaValida(tarjeta)
+                );
+                do {
+                    System.out.println("ingrese su numero de cvv ");
+                    cvv=entrada.nextLine();
+                    if (!esCVVValido(cvv)){
+                        System.out.println("cvv invalida");
+                    }
+
+                }
+                while (
+                        !esCVVValido(cvv)
+                );
+                System.out.println("ingrese el monto a pagar");
+                pago = entrada.nextDouble();
+                BOLETA(total,pago);
+
         }
 
     }
