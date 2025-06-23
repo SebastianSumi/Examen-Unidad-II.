@@ -331,7 +331,7 @@ public class PizzaHut {
         return Ubi;
     }
     public void mostrarMenu() {
-        for (int i = 0; i <= 7; i++) {
+        for (int i = 0; i < 7; i++) {
             System.out.println(generarOpcion(generarMenu(i), i));
         }
         seleccionarMenu();
