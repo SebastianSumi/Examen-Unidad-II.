@@ -338,15 +338,18 @@ public class PizzaHut {
     }
     public void seleccionarMenu() {
         int opcion;
-        opcion = sc.nextInt();
+        opcion = ValidarEntradaNumerica(0, 6, "Seleccione su ubicación:");
         if (opcion >= 0 && opcion < 6) {
             Ubic = generarMenu(opcion);
             Cargo = aplicarCargo(opcion);
-        } else {
+            soyCliente();
+        }
+        else if (opcion==7) {
             Random rand = new Random();
             opcion = rand.nextInt(6);
             Ubic = generarMenu(opcion);
             Cargo = aplicarCargo(opcion);
+            soyCliente();
         }
     }
     public double aplicarCargo(int i) {
@@ -433,38 +436,9 @@ public class PizzaHut {
         switch (opcion){
             case 1:
                 System.out.println("ingrese el monto a pagar");
-                double pago = entrada.nextDouble();
+                double pago = sc.nextDouble();
                 BOLETA(total,pago);
                 break;
-
-            default:
-                String tarjeta;
-                String cvv;
-                do {
-                    System.out.println("ingrese su numero de tarjeta ");
-                    tarjeta=entrada.nextLine();
-                    if (!esTarjetaValida(tarjeta)){
-                        System.out.println("Tarjeta invalida");
-                    }
-                }
-                while (
-                        !esTarjetaValida(tarjeta)
-                );
-                do {
-                    System.out.println("ingrese su numero de cvv ");
-                    cvv=entrada.nextLine();
-                    if (!esCVVValido(cvv)){
-                        System.out.println("cvv invalida");
-                    }
-
-                }
-                while (
-                        !esCVVValido(cvv)
-                );
-                System.out.println("ingrese el monto a pagar");
-                pago = entrada.nextDouble();
-                BOLETA(total,pago);
-
         }
 
     }
