@@ -287,7 +287,6 @@ public class PizzaHut {
                 new ArrayList<>(Arrays.asList(12.3, 5.2, 8.7))
         );
     }
-
     private void agregarMenu(ArrayList<String> menu, ArrayList<Double> precios) {
         todosMenus.add(menu);
         todosPrecios.add(precios);
@@ -302,7 +301,6 @@ public class PizzaHut {
         todosCarritos.add(carrito);
         todosSubtotales.add(subtotales);
     }
-
     public void MenuPrincipal(String ubicacion) {
         System.out.println("---Bienvenido a Pizza Hut---");
         System.out.println("En Pizza Hut cerca a " + ubicacion + " tenemos los siguientes menús: ");
@@ -316,11 +314,9 @@ public class PizzaHut {
         }
         menusito();
     }
-
     public String generarOpcion(String Ubi, int i) {
         return "(" + i + ")-" + Ubi;
     }
-
     public String generarMenu(int i) {
         String Ubi;
         ArrayList <String> ubicaciones = new ArrayList<>();
@@ -334,14 +330,12 @@ public class PizzaHut {
         Ubi = ubicaciones.get(i);
         return Ubi;
     }
-
     public void mostrarMenu() {
         for (int i = 0; i <= 7; i++) {
             System.out.println(generarOpcion(generarMenu(i), i));
         }
         seleccionarMenu();
     }
-
     public void seleccionarMenu() {
         int opcion;
         opcion = sc.nextInt();
@@ -355,7 +349,6 @@ public class PizzaHut {
             Cargo = aplicarCargo(opcion);
         }
     }
-
     public double aplicarCargo(int i) {
         ArrayList <Integer> km = new ArrayList<>();
         km.add(3);
@@ -366,7 +359,6 @@ public class PizzaHut {
         km.add(9);
         return km.get(i) * 0.3;
     }
-
     private int obtenerIndiceMenu(String ubicacion, int categoria) {
         int indiceUbicacion = -1;
         switch (ubicacion.toUpperCase()) {
@@ -382,7 +374,6 @@ public class PizzaHut {
         }
         return indiceUbicacion * 7 + (categoria - 1);
     }
-
     public int mostrarMenu(ArrayList<String> menu, ArrayList<Double> precios) {
         System.out.println("\n--- MENÚ DISPONIBLE ---");
         for (int i = 0; i < menu.size(); i++) {
@@ -390,7 +381,6 @@ public class PizzaHut {
         }
         return ValidarEntradaNumerica(1, menu.size(), "Seleccione un producto (1-" + menu.size() + ")") - 1;
     }
-
     public int Opcciones() {
         System.out.println("\nCATEGORÍAS DISPONIBLES:");
         System.out.println("1. Lo nuevo");
@@ -402,7 +392,6 @@ public class PizzaHut {
         System.out.println("7. Bebidas");
         return ValidarEntradaNumerica(1, 7, "Seleccione una categoría (1-7)");
     }
-
     public void procesarCompra(int indiceMenu, int opcionProducto) {
         ArrayList<String> menu = todosMenus.get(indiceMenu);
         ArrayList<Double> precios = todosPrecios.get(indiceMenu);
@@ -420,7 +409,6 @@ public class PizzaHut {
 
         System.out.println("✓ " + cantidad + " x " + menu.get(opcionProducto) + " añadido al carrito");
     }
-
     public void menusito() {
         System.out.println("\n¿Qué desea hacer ahora?");
         System.out.println("1. Elegir otro producto");
@@ -451,7 +439,6 @@ public class PizzaHut {
         }
 
     }
-
     public static boolean esTarjetaValida(String tarjeta) {
         boolean esValida = tarjeta != null && tarjeta.matches("^[0-9]{16}$");
         return esValida;
@@ -460,7 +447,6 @@ public class PizzaHut {
         boolean esValido = cvv != null && cvv.matches("^[0-9]{3}$");
         return esValido;
     }
-
     public void BOLETA(double totalApagar , double pago){
 
         double IGV = totalApagar * 0.18;
@@ -537,8 +523,6 @@ public class PizzaHut {
         }
 
     }
-
-
     private void pagar() {
         System.out.println("\n--- RESUMEN DE COMPRA ---");
         double total = 0;
@@ -580,7 +564,6 @@ public class PizzaHut {
         sc.nextLine();
         MenuPrincipal(Ubic);
     }
-
     private int ValidarEntradaNumerica(int min, int max, String mensaje) {
         int valor;
         do {
@@ -603,7 +586,6 @@ public class PizzaHut {
             System.out.println("Error al exportar la boleta: " + e.getMessage());
         }
     }
-
     public void sistema() {
         inicializarDatos();
         mostrarMenu();
