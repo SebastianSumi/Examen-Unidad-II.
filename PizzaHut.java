@@ -1,5 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class PizzaHut {
     ArrayList<String> Correos=new ArrayList<>();
     ArrayList<String> Contraseña=new ArrayList<>();
     String Ubic;
-    double Cargo;
+    ArrayList<Double> Cargo = new ArrayList<>();
 
     private void inicializarDatos() {
         // Ubicación 1: SALIDA HUANCANE
@@ -341,14 +342,14 @@ public class PizzaHut {
         opcion = ValidarEntradaNumerica(0, 6, "Seleccione su ubicación:");
         if (opcion >= 0 && opcion < 6) {
             Ubic = generarMenu(opcion);
-            Cargo = aplicarCargo(opcion);
+            Cargo.add(aplicarCargo(opcion));
             soyCliente();
         }
         else if (opcion==7) {
             Random rand = new Random();
             opcion = rand.nextInt(6);
             Ubic = generarMenu(opcion);
-            Cargo = aplicarCargo(opcion);
+            Cargo.add(aplicarCargo(opcion));
             soyCliente();
         }
     }
@@ -422,7 +423,11 @@ public class PizzaHut {
         int opcion = ValidarEntradaNumerica(1, 4, "Seleccione una opción (1-4)");
         switch (opcion) {
             case 1: MenuPrincipal(Ubic); break;
-            case 2: pagar(); break;
+            case 2: pagar();
+            if (persona==1){
+                todosSubtotales.add(Cargo);
+            }
+            break;
             case 3: MenuPrincipal(Ubic); break;
             case 4: System.exit(0);
         }
@@ -477,37 +482,51 @@ public class PizzaHut {
         boolean esValido = cvv != null && cvv.matches("^[0-9]{3}$");
         return esValido;
     }
-    public void BOLETA(double totalApagar , double pago){
+    public void BOLETA(double totalCompra, double pago) {
 
-        double IGV = totalApagar * 0.18;
-        double subtotal = totalApagar - IGV;
-        double vuelto = pago - totalApagar;
-        System.out.println("boleta de venta");
-        System.out.println("total: "+ totalApagar);
+        double totalPagar = totalCompra + Cargo.get(0);
+        double IGV = totalPagar * 0.18;
+        double subtotal = totalPagar - IGV;
+        double vuelto = pago - totalPagar;
+
+        System.out.println("Boleta de venta");
+        System.out.println("Total de productos: " + totalCompra);
+        System.out.println("Cargo por delivery: " + Cargo.get(0));
         System.out.println("IGV: " + IGV);
-        System.out.println("subtotal: " + subtotal);
-        System.out.println("vuelto: " +vuelto);
-        System.out.println("exportar boleta");
-        exportarBoleta(Voleta(totalApagar,pago),"Boleta.txt");
+        System.out.println("Subtotal: " + subtotal);
+        System.out.println("Total a pagar: " + totalPagar);
+        System.out.println("Pagado: " + pago);
+        System.out.println("Vuelto: " + vuelto);
+        System.out.println("Exportar boleta");
 
+        exportarBoleta(Voleta(totalCompra, pago), "Boleta.txt");
     }
-    public String Voleta(double totalPagar, double totalPagado ){
-        double igv=0.18*totalPagar;
-        double vuelto=totalPagado-totalPagar;
-        double subtotal=totalPagado-igv;
-        String contenido = "--------------------------------\n" +
-                "VOLETA DE VENTA\n" +
-                "--------------------------------\n" +
-                "Total a pagar: " + totalPagar + "\n" +
-                "Total pagado: " + totalPagado + "\n" +
-                "Vuelto: " + vuelto + "\n" +
-                "IGV: " + igv + "\n" +
-                "Subtotal: " + subtotal + "\n" +
-                "GRACIAS POR SU COMPRA\n" +
-                "____________________________\n";
-        System.out.println(contenido);
-        return contenido;
+    public String Voleta(double totalCompra, double totalPagado) {
+        double totalPagar = totalCompra + Cargo.get(0);
+        double igv = totalPagar * 0.18;
+        double subtotal = totalPagar - igv;
+        double vuelto = totalPagado - totalPagar;
 
+        StringBuilder contenido = new StringBuilder();
+        contenido.append(centerText("BOLETA DE VENTA", 40)).append("\n");
+        contenido.append("----------------------------------------\n");
+        contenido.append(String.format("%-25s %13.2f\n", "Productos:", totalCompra));
+        contenido.append(String.format("%-25s %13.2f\n", "Delivery:", Cargo.get(0)));
+        contenido.append(String.format("%-25s %13.2f\n", "Subtotal:", subtotal));
+        contenido.append(String.format("%-25s %13.2f\n", "IGV (18%):", igv));
+        contenido.append(String.format("%-25s %13.2f\n", "Total a pagar:", totalPagar));
+        contenido.append(String.format("%-25s %13.2f\n", "Total pagado:", totalPagado));
+        contenido.append(String.format("%-25s %13.2f\n", "Vuelto:", vuelto));
+        contenido.append("----------------------------------------\n");
+        contenido.append(centerText("GRACIAS POR SU COMPRA", 40)).append("\n");
+        contenido.append("\n\n"); // espacio para corte de papel
+        return contenido.toString();
+    }
+
+    // Método auxiliar para centrar texto
+    private String centerText(String text, int width) {
+        int padding = (width - text.length()) / 2;
+        return " ".repeat(Math.max(0, padding)) + text;
     }
     public void Vendedor(){
 
@@ -608,10 +627,9 @@ public class PizzaHut {
         return valor;
     }
     public void exportarBoleta(String contenido, String nombreArchivo) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) {
-            writer.write(contenido);
-            writer.flush(); // Asegura que se escriba completamente
-            System.out.println("Boleta exportada con éxito a " + nombreArchivo);
+        try (PrintWriter writer = new PrintWriter(nombreArchivo)) {
+            writer.print(contenido);
+            System.out.println("Boleta exportada correctamente.");
         } catch (IOException e) {
             System.out.println("Error al exportar la boleta: " + e.getMessage());
         }
@@ -664,6 +682,7 @@ public class PizzaHut {
         Contraseña.add(contraseña);
 
     }
+    public int persona=0;
     public void iniciarSesion(){
         String correo, contraseña;
         System.out.println("Inicio de sesion");
@@ -673,13 +692,14 @@ public class PizzaHut {
         contraseña= sc.nextLine();
         int indiceContraseña=Contraseña.indexOf(contraseña);
         int indiceCorreo=Correos.indexOf(correo);
-        if (correo.equals(Correos.get(indiceCorreo))&&contraseña.equals(Contraseña.get(indiceContraseña))){
-            System.out.println("Inicio de sesion exitoso puede, acceder");
-            Vendedor();
-        }
         if (correo.equals(email_admin)&&contraseña.equals(pass_admin)){
             System.out.println("Inicio de sesion exitoso puede, acceder");
             administrador();
+        }
+        else if (correo.equals(Correos.get(indiceCorreo))&&contraseña.equals(Contraseña.get(indiceContraseña))){
+            System.out.println("Inicio de sesion exitoso puede, acceder");
+            Vendedor();
+            persona=1;
         }
         else {
             System.out.println("Inicio de sesion fallido");
