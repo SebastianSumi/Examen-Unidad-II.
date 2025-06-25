@@ -435,7 +435,7 @@ public class PizzaHut {
         switch (opcion){
             case 1:
                 System.out.println("ingrese el monto a pagar");
-                double pago = entrada.nextDouble();
+                double pago = sc.nextDouble();
                 BOLETA(total,pago);
                 break;
 
@@ -444,7 +444,7 @@ public class PizzaHut {
                 String cvv;
                 do {
                     System.out.println("ingrese su numero de tarjeta ");
-                    tarjeta=entrada.nextLine();
+                    tarjeta=sc.nextLine();
                     if (!esTarjetaValida(tarjeta)){
                         System.out.println("Tarjeta invalida");
                     }
@@ -454,7 +454,7 @@ public class PizzaHut {
                 );
                 do {
                     System.out.println("ingrese su numero de cvv ");
-                    cvv=entrada.nextLine();
+                    cvv=sc.nextLine();
                     if (!esCVVValido(cvv)){
                         System.out.println("cvv invalida");
                     }
@@ -464,7 +464,7 @@ public class PizzaHut {
                         !esCVVValido(cvv)
                 );
                 System.out.println("ingrese el monto a pagar");
-                pago = entrada.nextDouble();
+                pago = sc.nextDouble();
                 BOLETA(total,pago);
 
         }
