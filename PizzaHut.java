@@ -719,15 +719,18 @@ public class PizzaHut {
             switch (swt = sc.nextInt()){
                 case 1:
                     System.out.println("Ingrese el nombre del producto");
+                    sc.nextLine();
                     todosMenus.get(indice).add(sc.nextLine());
                     System.out.println("Ingrese el precio del producto");
                     todosPrecios.get(indice).add(sc.nextDouble());
                     break;
                 case 2:
                     System.out.println("Ingrese el nombre del producto");
-                    todosMenus.get(indice).indexOf(sc.nextLine());
-                    todosMenus.get(indice).remove(sc.nextLine());
-                    todosPrecios.get(indice).remove(sc.nextLine());
+                    sc.nextLine();
+                    String producto = sc.nextLine();
+                    todosMenus.get(indice).indexOf(producto);
+                    todosMenus.get(indice).remove(producto);
+                    todosPrecios.get(indice).remove(producto);
                     break;
                 case 3:
                     System.out.println("Saliendo");
@@ -740,10 +743,12 @@ public class PizzaHut {
     }
     public void modificarProducto(){
         int opcion;
-        System.out.println("Ingrese la categoria en la que desea agregar productos");
+        System.out.println("Ingrese la categoria en la que desea modificar productos");
         opcion = Opcciones();
         int indice = obtenerIndiceMenu(Ubic,opcion);
+        sc.nextLine();
         System.out.println("Ingrese el nombre del producto");
+        sc.nextLine();
         int index = todosMenus.get(indice).indexOf(sc.nextLine());
         System.out.println("Ingrese el nuevo nombre del producto");
         todosMenus.get(indice).set(index,sc.nextLine());
