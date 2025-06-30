@@ -339,7 +339,7 @@ public class PizzaHut {
     }
     public void seleccionarMenu() {
         int opcion;
-        opcion = ValidarEntradaNumerica(0, 6, "Seleccione su ubicación:");
+        opcion = ValidarEntradaNumerica(0, 6, "Seleccione su ubicación");
         if (opcion >= 0 && opcion < 6) {
             Ubic = generarMenu(opcion);
             Cargo.add(aplicarCargo(opcion));
@@ -488,15 +488,16 @@ public class PizzaHut {
         double IGV = totalPagar * 0.18;
         double subtotal = totalPagar - IGV;
         double vuelto = pago - totalPagar;
-
-        System.out.println("Boleta de venta");
-        System.out.println("Total de productos: " + totalCompra);
-        System.out.println("Cargo por delivery: " + Cargo.get(0));
-        System.out.println("IGV: " + IGV);
-        System.out.println("Subtotal: " + subtotal);
-        System.out.println("Total a pagar: " + totalPagar);
-        System.out.println("Pagado: " + pago);
-        System.out.println("Vuelto: " + vuelto);
+        System.out.println((centerText("BOLETA DE VENTA", 40)));
+        System.out.println("----------------------------------------\n");
+        System.out.println(String.format("%-25s %13.2f\n", "Productos:", totalCompra));
+        System.out.println(String.format("%-25s %13.2f\n", "Delivery:", Cargo.get(0)));
+        System.out.println(String.format("%-25s %13.2f\n", "Subtotal:", subtotal));
+        System.out.println(String.format("%-25s %13.2f\n", "IGV (18%):", IGV));
+        System.out.println(String.format("%-25s %13.2f\n", "Total a pagar:", totalPagar));
+        System.out.println(String.format("%-25s %13.2f\n", "Total pagado:", pago));
+        System.out.println(String.format("%-25s %13.2f\n", "Vuelto:", vuelto));
+        System.out.println("----------------------------------------\n");
         System.out.println("Exportar boleta");
 
         exportarBoleta(Voleta(totalCompra, pago), "Boleta.txt");
@@ -533,7 +534,7 @@ public class PizzaHut {
         System.out.println("1.-vender productos");
         System.out.println("2.-generar boleta");
         System.out.println("3.-mostrar lista de productos");
-        System.out.println("4.-esportar boleta");
+        System.out.println("4.-exportar boleta");
         System.out.println("5.-imprimir boleta");
 
         int opcion = ValidarEntradaNumerica(1 , 5,"ingrese una opcion del 1 - 5");
@@ -686,7 +687,7 @@ public class PizzaHut {
     public void iniciarSesion(){
         String correo, contraseña;
         System.out.println("Inicio de sesion");
-        System.out.print("Ingrese su correo electronico:");
+        System.out.println("Ingrese su correo electronico:");
         correo= sc.nextLine();
         System.out.println("Ingrese su contraseña:");
         contraseña= sc.nextLine();
