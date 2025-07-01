@@ -1,3 +1,4 @@
+
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -632,7 +633,7 @@ public class PizzaHut2 {
     public String generarDetalleCompra() {
         StringBuilder detalle = new StringBuilder();
         detalle.append(centerText("DETALLE DE LA COMPRA", 40)).append("\n");
-        detalle.append("----------------------------------------\n");
+        detalle.append("------------------------\n");
 
         for (int i = 0; i < todosMenus.size(); i++) {
             for (int j = 0; j < todosCarritos.get(i).size(); j++) {
@@ -651,11 +652,12 @@ public class PizzaHut2 {
             }
         }
 
-        detalle.append("----------------------------------------\n");
+        detalle.append("-----------------------\n");
         detalle.append(centerText("FIN DEL DETALLE", 40)).append("\n");
 
         return detalle.toString();
     }
+
 
     public void exportarBoleta(String contenidoBoleta, String nombreArchivo) {
         String detalle = generarDetalleCompra(); // genera el detalle de productos
@@ -667,7 +669,7 @@ public class PizzaHut2 {
 
         try (PrintWriter writer = new PrintWriter(nombreArchivo)) {
             writer.print(centerText("PIZZA HUT - SISTEMA DE VENTAS", 40) + "\n");
-
+            writer.print(centerText("Fecha y hora: " + fechaHoraActual, 40) + "\n");
             writer.print("=".repeat(40) + "\n\n");
 
             // ✅ Agrega el detalle de la compra primero
@@ -675,13 +677,13 @@ public class PizzaHut2 {
 
             // Luego, agrega la boleta (totales, IGV, delivery, etc.)
             writer.print(contenidoBoleta);
-            writer.print(centerText("Fecha y hora: " + fechaHoraActual, 40) + "\n");
 
             System.out.println("Boleta exportada correctamente con detalle de compra.");
         } catch (IOException e) {
             System.out.println("Error al exportar la boleta: " + e.getMessage());
         }
     }
+
     public void sistema() {
         inicializarDatos();
         mostrarMenu();
