@@ -1,5 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,12 +5,15 @@ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.Random;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class PizzaHut {
+public class PizzaHut2 {
     Scanner sc = new Scanner(System.in);
     final String email_admin = "admin@pizzahut.com";
     final String pass_admin = "1@holaHOLA";
-
+    final String email_vendedor = "vendedor@pizzahut.com";
+    final String pass_vendedor = "2@holaHOLA";
 
     ArrayList<ArrayList<String>> todosMenus = new ArrayList<>();
     ArrayList<ArrayList<Double>> todosPrecios = new ArrayList<>();
@@ -424,10 +425,10 @@ public class PizzaHut {
         switch (opcion) {
             case 1: MenuPrincipal(Ubic); break;
             case 2: pagar();
-            if (persona==1){
-                todosSubtotales.add(Cargo);
-            }
-            break;
+                if (persona==1){
+                    todosSubtotales.add(Cargo);
+                }
+                break;
             case 3: MenuPrincipal(Ubic); break;
             case 4: System.exit(0);
         }
@@ -627,10 +628,56 @@ public class PizzaHut {
         } while (valor < min || valor > max);
         return valor;
     }
-    public void exportarBoleta(String contenido, String nombreArchivo) {
+
+    public String generarDetalleCompra() {
+        StringBuilder detalle = new StringBuilder();
+        detalle.append(centerText("DETALLE DE LA COMPRA", 40)).append("\n");
+        detalle.append("----------------------------------------\n");
+
+        for (int i = 0; i < todosMenus.size(); i++) {
+            for (int j = 0; j < todosCarritos.get(i).size(); j++) {
+                int cantidad = todosCarritos.get(i).get(j);
+                if (cantidad > 0) {
+                    String producto = todosMenus.get(i).get(j);
+                    double precio = todosPrecios.get(i).get(j);
+                    double subtotal = todosSubtotales.get(i).get(j);
+
+                    detalle.append(String.format("%2d x %-25s S/%.2f = S/%.2f\n",
+                            cantidad,
+                            producto.length() > 25 ? producto.substring(0, 24) + "…" : producto,
+                            precio,
+                            subtotal));
+                }
+            }
+        }
+
+        detalle.append("----------------------------------------\n");
+        detalle.append(centerText("FIN DEL DETALLE", 40)).append("\n");
+
+        return detalle.toString();
+    }
+
+    public void exportarBoleta(String contenidoBoleta, String nombreArchivo) {
+        String detalle = generarDetalleCompra(); // genera el detalle de productos
+
+        // Formatea la fecha y hora actual
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String fechaHoraActual = ahora.format(formato);
+
         try (PrintWriter writer = new PrintWriter(nombreArchivo)) {
-            writer.print(contenido);
-            System.out.println("Boleta exportada correctamente.");
+            writer.print(centerText("PIZZA HUT - SISTEMA DE VENTAS", 40) + "\n");
+
+            writer.print("=".repeat(40) + "\n\n");
+
+            // ✅ Agrega el detalle de la compra primero
+            writer.print(detalle);
+
+            // Luego, agrega la boleta (totales, IGV, delivery, etc.)
+            writer.print(contenidoBoleta);
+            writer.print(centerText("Fecha y hora: " + fechaHoraActual, 40) + "\n");
+
+            System.out.println("Boleta exportada correctamente con detalle de compra.");
         } catch (IOException e) {
             System.out.println("Error al exportar la boleta: " + e.getMessage());
         }
@@ -696,6 +743,10 @@ public class PizzaHut {
         if (correo.equals(email_admin)&&contraseña.equals(pass_admin)){
             System.out.println("Inicio de sesion exitoso puede, acceder");
             administrador();
+        }
+        if (correo.equals(email_vendedor)&&contraseña.equals(pass_vendedor)){
+            System.out.println("Inicio de sesion exitoso puede, aceder");
+            Vendedor();
         }
         else if (correo.equals(Correos.get(indiceCorreo))&&contraseña.equals(Contraseña.get(indiceContraseña))){
             System.out.println("Inicio de sesion exitoso puede, acceder");
@@ -779,7 +830,7 @@ public class PizzaHut {
         }while (opcion!=3);
     }
     public static void main(String[] args) {
-        PizzaHut PH = new PizzaHut();
+        PizzaHut2 PH = new PizzaHut2();
         PH.sistema();
     }
 }
